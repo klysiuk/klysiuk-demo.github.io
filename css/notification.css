@@ -1,0 +1,74 @@
+/* ==========================================================================
+    Notifications
+   ========================================================================== */
+
+    .notification {
+        z-index: 100;
+        position: fixed;
+        top: 0;
+        width: 100%;
+    }
+
+    .notification.warning, .notification.warn, .info {
+        background-color: #fef0d6;
+    }
+
+    .notification.error {
+        background-color: rgb(241, 210, 210);
+    }
+
+    .notification.success {
+        background-color: rgb(175, 234, 175);
+    }
+
+    .notification-container {
+        max-width: 1280px;
+        margin: 0 auto;
+        position: relative;
+    }
+
+    .notification-inner {
+        width: 100%;
+        overflow: hidden;
+        padding: 1em 2em;
+        box-sizing: border-box;
+        overflow: hidden;
+        display: table;
+    }
+
+    .notification-inner p {
+        display: inline-block;
+        font-size: 1.2em;
+        line-height: 1.2em;
+        margin: 0;
+        vertical-align: middle;
+        width: 90%;
+    }
+
+    .warn p {
+        color: #e3a83c;
+    }
+
+    .error p {
+        color: red;
+    }
+
+    .success p {
+        color: #19A671;
+    }
+
+    .notification-inner p span {
+        font-family: HelveticaNeueBold;
+    }
+
+    .notification-close {
+        display: inline-block;
+        vertical-align: middle;
+        width: 10%;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .success .notification-close, .error .notification-close {
+      /*   background: url("../img/spriteSmall16.png") no-repeat left -32px; */
+    }
