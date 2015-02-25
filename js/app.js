@@ -241,7 +241,7 @@ app.controller('gameController', ['$scope', function ($scope) {
     while(data.sideValues.length) {  
       if (data.sideValues.length) {
         var randomSideValue = Math.floor(Math.random() * data.sideValues.length);
-        var index = data.sideValues[randomCornerValue];
+        var index = data.sideValues[randomSideValue];
         if ($scope.table[index]==undefined) {           
             data.sideValues.splice(randomSideValue,1);
             return placeSign(index, data.computerSign, data.computerData);
