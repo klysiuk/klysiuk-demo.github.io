@@ -102,6 +102,8 @@ app.controller('gameController', ['$scope', function ($scope) {
   function userPartAction(cellNumber) {
     //save user results
     placeSign(cellNumber, data.userSign, data.userData);
+    // check if win
+    if (checkIfUserWon()) return;
     // computer turn
     computerPartAction();
   }
@@ -130,6 +132,33 @@ app.controller('gameController', ['$scope', function ($scope) {
     };
   }
 
+  function checkIfUserWon() {
+    // for win 3 chars are needed, if we have less
+    // checking has no sense
+    if(Object.keys(data.userData).length<2) return;
+
+    for (var i=0;i<data.successCombinations.length;i++) {
+
+      var variant = data.successCombinations[i];
+      var successCellsAmount = 0;
+      var missingValue;
+      for (var j in variant) {
+        if (typeof data.userData[variant[j]] != 'undefined') {
+            successCellsAmount++;
+        }
+      }
+
+      if (successCellsAmount == 3) {
+        changeStatus(data.statuses.winText('User'));
+        data.gameOver = true;
+        $scope.disableInputs = true;
+        return true;
+      }
+
+    }
+
+  }
+
   /*
   *!!! Internal part of next 2 functions can and should be extracted into one function
   *    because logic is the same, but I left it as it is for better understanding
@@ -138,75 +167,69 @@ app.controller('gameController', ['$scope', function ($scope) {
 
   function checkSuccessCombinationPresence() {
 
-      // for win 3 chars are needed, if we have less
-      // checking has no sense
-      if(Object.keys(data.userData).length<2) return;
+    // for win 3 chars are needed, if we have less
+    // checking has no sense
+    if(Object.keys(data.userData).length<2) return;
 
-      for (var i=0;i<data.successCombinations.length;i++) {
+    for (var i=0;i<data.successCombinations.length;i++) {
 
-          var variant = data.successCombinations[i];
-          var successCellsAmount = 0;
-          var missingValue;
-          for (var j in variant) {
-            if (typeof data.computerData[variant[j]] != 'undefined') {
-                successCellsAmount++;
-            }
-            else {
-              missingValue = variant[j];
-            } 
-          }
-
-          if (successCellsAmount == 2) {
-            var index =  missingValue;
-            // if the only remaining value from success variant is empty
-            if ($scope.table[index]==undefined) {              
-                changeStatus(data.statuses.winText('Computer'));
-                data.gameOver = true;
-                $scope.disableInputs = true;
-                return placeSign(index, data.computerSign, data.computerData);
-            }
-            // if the only remaining value from success variant is not empty
-            // we remove this variant from successCombinations array
-
-            data.successCombinations.splice(i,1);
-            
-          }
-
+      var variant = data.successCombinations[i];
+      var successCellsAmount = 0;
+      var missingValue;
+      for (var j in variant) {
+        if (typeof data.computerData[variant[j]] != 'undefined') {
+          successCellsAmount++;
+        }
+        else {
+          missingValue = variant[j];
+        } 
       }
+
+      if (successCellsAmount == 2) {
+        var index =  missingValue;
+          // if the only remaining value from success variant is empty
+          if ($scope.table[index]==undefined) {              
+            changeStatus(data.statuses.winText('Computer'));
+            data.gameOver = true;
+            $scope.disableInputs = true;
+            return placeSign(index, data.computerSign, data.computerData);
+          }
+          // if the only remaining value from success variant is not empty
+          // we remove this variant from successCombinations array
+          data.successCombinations.splice(i,1);       
+      }
+    }
 
   }
 
   function blockUserWin() {
 
-      // for win 3 chars are needed, if we have less
-      // checking has no sense
-      if(Object.keys(data.userData).length<2) return;
+    // for win 3 chars are needed, if we have less
+    // checking has no sense
+    if(Object.keys(data.userData).length<2) return;
 
-      for (var i=0;i<data.successCombinations.length;i++) {
-
-          var variant = data.successCombinations[i];
-          var successCellsAmount = 0;
-          var missingValue;
-          for (var j in variant) {
-            if (typeof data.userData[variant[j]] != 'undefined') {
-                successCellsAmount++;
-            }
-            else {
-              missingValue = variant[j];
-            } 
-          }
-
-          if (successCellsAmount == 2) {
-            var index = missingValue;
-            data.successCombinations.splice(i,1);
-            if ($scope.table[index]==undefined) {
-             return placeSign(index, data.computerSign, data.computerData);
-            }
-
-          }
-
+    for (var i=0;i<data.successCombinations.length;i++) {
+      var variant = data.successCombinations[i];
+      var successCellsAmount = 0;
+      var missingValue;
+      for (var j in variant) {
+        if (typeof data.userData[variant[j]] != 'undefined') {
+            successCellsAmount++;
+        }
+        else {
+          missingValue = variant[j];
+        } 
       }
 
+      if (successCellsAmount == 2) {
+        var index = missingValue;
+        data.successCombinations.splice(i,1);
+        if ($scope.table[index]==undefined) {
+         return placeSign(index, data.computerSign, data.computerData);
+        }
+
+      }
+    }
   }
 
   function addValue() {
@@ -223,17 +246,17 @@ app.controller('gameController', ['$scope', function ($scope) {
 
     // while corner cell is empty -> place sign there
     while(data.cornerValues.length) {    
-        if (data.cornerValues.length) {
-          var randomCornerValue = Math.floor(Math.random() * data.cornerValues.length);
-          var index = data.cornerValues[randomCornerValue];
-          if ($scope.table[index]==undefined) {            
-           data.cornerValues.splice(randomCornerValue,1);
-           return placeSign(index, data.computerSign, data.computerData);
-         }
-          else {
-            // remove this variant to not check it again in future
-            data.cornerValues.splice(randomCornerValue,1);
-          }      
+      if (data.cornerValues.length) {
+        var randomCornerValue = Math.floor(Math.random() * data.cornerValues.length);
+        var index = data.cornerValues[randomCornerValue];
+        if ($scope.table[index]==undefined) {            
+         data.cornerValues.splice(randomCornerValue,1);
+         return placeSign(index, data.computerSign, data.computerData);
+       }
+        else {
+          // remove this variant to not check it again in future
+          data.cornerValues.splice(randomCornerValue,1);
+        }      
 
         }             
     }
@@ -243,31 +266,29 @@ app.controller('gameController', ['$scope', function ($scope) {
         var randomSideValue = Math.floor(Math.random() * data.sideValues.length);
         var index = data.sideValues[randomSideValue];
         if ($scope.table[index]==undefined) {           
-            data.sideValues.splice(randomSideValue,1);
-            return placeSign(index, data.computerSign, data.computerData);
+          data.sideValues.splice(randomSideValue,1);
+          return placeSign(index, data.computerSign, data.computerData);
         }
         else {
           // remove this variant to not check it again in future
           data.sideValues.splice(randomSideValue,1);
         }
-
       }          
     }
-
   }
 
-   function placeSign(index, sign, obj) {
-      $scope.table[index]=sign;
-      obj[index]=index;
-      ++data.turnsAmount;
-      if(!data.gameOver) {
-        changeStatus(data.statuses.userTurn);
-      }
-      return true;
+  function placeSign(index, sign, obj) {
+    $scope.table[index]=sign;
+    obj[index]=index;
+    ++data.turnsAmount;
+    if(!data.gameOver) {
+      changeStatus(data.statuses.userTurn);
+    }
+    return true;
    }
 
   function changeStatus(status) {
-      $scope.status = status;
+    $scope.status = status;
   }
 
 
