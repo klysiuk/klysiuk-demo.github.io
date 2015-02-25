@@ -293,6 +293,41 @@ nav a:hover {
         margin: 1em 0;
     }
 
+    .ul-style {
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+    } 
+
+    .game-table {
+       width: 250px;
+       list-style: none;
+    }
+
+    .colored {
+       padding: 2em;
+       background-color: antiquewhite;
+    }
+
+    .left {
+        float: left;
+    }
+
+    .game-table input[type=text] {
+        width: 60px;
+        height: 60px;
+        padding: 10px;
+        text-align: center;
+        font-size: 36px;
+        line-height: 35px;
+        border: 1px solid #000;
+    }
+
+    .block {
+        margin: 15px 0;
+    }
+
+
 
 
 

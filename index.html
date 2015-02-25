@@ -30,6 +30,7 @@
                 <nav>
                     <ul>
                         <li><a href="#notification">Notification</a></li>
+                        <li><a href="#gamepage">X/O game</a></li>
                     </ul>
                 </nav>
             </header>
@@ -92,6 +93,38 @@
                 </dd>
             </dl>
         </aside>
+        </script>
+        <script type="text/ng-template" id="game-page.html">
+           <article>
+           <h1>X/O game</h1>
+           <div class='block'>
+                <h3>Choose your turn</h3>
+                <p>First player <input type='radio' ng-model='userTurn' ng-value='1'/></p>         
+                <p>Second player <input type='radio' ng-model='userTurn' ng-value='2'/></p>
+           </div>
+           <div class='block'>
+                <button ng-click='start()' >Start Game</button>
+           </div>
+            <div class='block colored'>
+                <div><strong>Status:</strong> {{status}}</div>
+           </div>
+           <div class='block'> 
+                <ul class="ul-style game-table">
+                    <li ng-repeat="i in table track by $index" class='left'><input type="text" ng-disabled="disableInputs || table[$index]!=undefined" ng-change='startMove($index)'  ng-model='table[$index]' /></li>
+                </ul>
+            </div>
+            </article>
+            <aside>
+                <h3>Description</h3>
+                <p class='custom-vertspace'>Press any alfanumeric key to make a move</p>
+                <p class='custom-vertspace'>Future improvements:</p>
+                <ul>
+                    <li><strong>Styles: </strong>add extra styling to separate X/O signs, highlight successful combination</li>
+                    <li><strong>Algorytm: </strong>change to not always place a sign of computer in a corner value if other combination is free</li>
+                    <li><strong>Code refactoring: </strong>move logic from controller to service</li>
+                    <li><strong>Code refactoring: </strong>internal part of some functions can and should be extracted into one function because logic is the same, but I left it as it is for better code understanding</li>
+                </ul>
+            </aside>
         </script>
 
     </body>
